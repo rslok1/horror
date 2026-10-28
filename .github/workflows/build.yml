@@ -1,0 +1,27 @@
+name: Build EXE
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Скачать код
+        uses: actions/checkout@v4
+
+      - name: Установить Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Установить зависимости
+        run: pip install pygame pyinstaller
+
+      - name: Собрать exe
+        run: pyinstaller --onefile --add-data "assets;assets" psych_horror_exe.py
+
+      - name: Сохранить результат
+        uses: actions/upload-artifact@v4
+        with:
+          name: psych-horror-exe
+          path: dist/psych_horror_exe.exe
